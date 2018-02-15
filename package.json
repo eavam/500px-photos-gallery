@@ -23,13 +23,15 @@
     "ios": "react-native-scripts ios",
     "test": "node node_modules/jest/bin/jest.js",
     "flow": "flow",
-    "eslint": "eslint --fix"
+    "eslint": "eslint --fix",
+    "build:android": "exp build:android"
   },
   "jest": {
     "preset": "jest-expo"
   },
   "dependencies": {
     "eslint": "^4.17.0",
+    "exp": "^49.2.2",
     "expo": "^25.0.0",
     "react": "16.2.0",
     "react-native": "0.52.0",
