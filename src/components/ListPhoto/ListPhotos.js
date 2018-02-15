@@ -1,8 +1,9 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Image } from "react-native";
-import styled from "styled-components";
-import { token, baseUrl } from "../../api";
-import Loader from "../Loader";
+// @flow
+import React, { Component } from 'react';
+import { Image } from 'react-native';
+import styled from 'styled-components';
+import { token, baseUrl } from '../../api';
+import Loader from '../Loader';
 
 const Container = styled.FlatList`
   padding: 20px 20px 40px 20px;
@@ -14,7 +15,16 @@ const ImagesContainer = styled.TouchableOpacity`
   padding: 10px;
 `;
 
-class ListPhotos extends Component {
+type Props = {
+  onPressImage: () => void
+}
+
+type State = {
+  photos: Array<mixed>,
+  isLoading: boolean,
+  currentPage: number
+}
+class ListPhotos extends Component<Props, State> {
   state = {
     photos: [],
     isLoading: true,
@@ -24,7 +34,7 @@ class ListPhotos extends Component {
   componentDidMount() {
     return fetch(`${baseUrl}photos?feature=popular&consumer_key=${token}`)
       .then(r => r.json())
-      .then(response => {
+      .then((response) => {
         this.setState({ photos: response.photos, isLoading: false });
       })
       .catch(error => console.error(error));
@@ -34,17 +44,16 @@ class ListPhotos extends Component {
     const newCurrentPage = this.state.currentPage + 1;
     if (this.state.isLoading) return;
 
-    this.setState({ isLoading: true }, () => {
-      return fetch(`${baseUrl}photos?page=${newCurrentPage}&feature=popular&consumer_key=${token}`)
+    this.setState({ isLoading: true }, () =>
+      fetch(`${baseUrl}photos?page=${newCurrentPage}&feature=popular&consumer_key=${token}`)
         .then(r => r.json())
-        .then(response => {
+        .then((response) => {
           this.setState(state => ({
             photos: [...state.photos, ...response.photos],
             currentPage: newCurrentPage,
             isLoading: false,
           }));
-        });
-    });
+        }));
   };
 
   renderList = ({ item }) => (

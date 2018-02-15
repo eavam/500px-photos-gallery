@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Image } from "react-native";
-import styled from "styled-components";
-import { token, baseUrl } from "../../api";
-import Loader from "../Loader";
+// @flow
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import { token, baseUrl } from '../../api';
+import Loader from '../Loader';
 
 const ImageContainer = styled.TouchableOpacity`
   position: absolute;
@@ -25,7 +25,17 @@ const CurrentImage = styled.Image`
   bottom: 0;
 `;
 
-class CurrentPhoto extends Component {
+type Props = {
+  id: number,
+  onPressImage: () => void,
+};
+
+type State = {
+  photo: any,
+  isLoading: boolean,
+};
+
+class CurrentPhoto extends Component<Props, State> {
   state = {
     photo: null,
     isLoading: true,
@@ -34,9 +44,9 @@ class CurrentPhoto extends Component {
   componentDidMount() {
     if (!this.props.id) return;
 
-    return fetch(`${baseUrl}photos/${this.props.id}?feature=popular&size=4&consumer_key=${token}`)
+    fetch(`${baseUrl}photos/${this.props.id}?feature=popular&size=4&consumer_key=${token}`)
       .then(r => r.json())
-      .then(response => {
+      .then((response) => {
         this.setState({ photo: response.photo, isLoading: false });
       })
       .catch(error => console.error(error));
